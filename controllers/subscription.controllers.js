@@ -1,3 +1,5 @@
+import { SERVER_URL, NODE_ENV } from "../config/env.js";
+import { workflowClient } from "../config/upstash.js";
 import Subscription from "../models/subscription.model.js";
 
 export const createSubscription = async (req, res, next) => {
@@ -6,6 +8,18 @@ export const createSubscription = async (req, res, next) => {
             ...req.body,
             user: req.user._id
         });
+        try {
+            await workflowClient.trigger({
+                url: `${SERVER_URL}/api/workflows/subscription/reminder`,
+                body: {
+                    subscriptionId: subscription.id
+                }
+            });
+        } catch (workflowError) {
+            const isConnectionRefused = workflowError.cause?.code === 'ECONNREFUSED';
+            if (isConnectionRefused) {
+            }
+        }
         res.status(201).json({
             success: true,
             message: "Subscription created successfully",

@@ -8,6 +8,7 @@ import connectDB from './database/mongodb.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 import cookieParser from 'cookie-parser';
 import arcjetMiddleware from './middlewares/arcjet.middleware.js';
+import workflowRouter from './routes/workflow.routes.js';
 
 const app = express();
 
@@ -20,10 +21,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/subscriptions', subscriptionRouter);
+app.use('/api/workflows', workflowRouter);
 
-app.listen(PORT, () => {
-    connectDB()
-    console.log(`server is running on port http://localhost:${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+        app.listen(PORT, () => { });
+    } catch (error) {
+        process.exit(1);
+    }
+};
+
+startServer();
 
 export default app;

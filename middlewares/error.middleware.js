@@ -2,9 +2,6 @@ const errorMiddleware = (err, req, res, next) => {
     try {
         let error = { ...err };
         error.message = err.message;
-        if (error.stack) {
-            console.log(error.stack);
-        }
 
         if (error.name === 'CastError') {
             error.message = `Resource not found. Invalid: ${error.path}: ${error.value}`;
