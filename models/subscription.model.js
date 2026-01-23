@@ -59,23 +59,24 @@ const subscriptionSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-//auto calculate the end date based on the frequency and start date
-subscriptionSchema.pre('save', function (next) {
-    if (!this.renewalDate) {
+subscriptionSchema.pre('save', async function () {
+    if (!this.renewalDate && this.frequency && this.startDate) {
         const renewalPeriods = {
             daily: 1,
             weekly: 7,
             monthly: 30,
             yearly: 365,
+        };
+        const daysToAdd = renewalPeriods[this.frequency];
+        if (daysToAdd) {
+            this.renewalDate = new Date(this.startDate);
+            this.renewalDate.setDate(this.renewalDate.getDate() + daysToAdd);
         }
-        this.renewalDate = new Date(this.startDate)
-        this.renewalDate.setDate(this.renewalDate.getDate() + renewalPeriods[this.frequency])
     }
 
-    if (this.renewalDate < new Date()) {
-        this.status = 'expired'
+    if (this.renewalDate && this.renewalDate < new Date()) {
+        this.status = 'expired';
     }
-    next();
 });
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema);
