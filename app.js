@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { PORT } from './config/env.js';
 
 import userRouter from './routes/user.routes.js';
@@ -12,6 +13,7 @@ import workflowRouter from './routes/workflow.routes.js';
 
 const app = express();
 
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(arcjetMiddleware);
@@ -22,11 +24,11 @@ app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/subscriptions', subscriptionRouter);
 app.use('/api/workflows', workflowRouter);
-
+console.log('kkk')
 const startServer = async () => {
     try {
         await connectDB();
-        app.listen(PORT, () => { });
+        app.listen(PORT, '0.0.0.0', () => { });
     } catch (error) {
         process.exit(1);
     }
