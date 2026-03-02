@@ -24,7 +24,7 @@ app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/subscriptions', subscriptionRouter);
 app.use('/api/workflows', workflowRouter);
-console.log('kkk')
+
 const startServer = async () => {
     try {
         await connectDB();

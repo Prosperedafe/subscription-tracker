@@ -1,6 +1,7 @@
 import { SERVER_URL } from "../config/env.js";
 import { workflowClient } from "../config/upstash.js";
 import Subscription from "../models/subscription.model.js";
+import SubscriptionList from "../models/subscription-list.model.js";
 
 export const createSubscription = async (req, res, next) => {
     try {
@@ -41,6 +42,19 @@ export const getUserSubscriptions = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Subscriptions fetched successfully",
+            data: subscriptions
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getSubscriptionList = async (req, res, next) => {
+    try {
+        const subscriptions = await SubscriptionList.find();
+        res.status(200).json({
+            success: true,
+            message: "Subscription list fetched successfully",
             data: subscriptions
         })
     } catch (error) {
