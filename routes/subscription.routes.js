@@ -4,7 +4,7 @@ import { createSubscription, getUserSubscriptions, getSubscriptionList } from '.
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get('/list', getSubscriptionList);
+subscriptionRouter.get('/list', authorize, getSubscriptionList);
 
 subscriptionRouter.post('/', authorize, createSubscription);
 

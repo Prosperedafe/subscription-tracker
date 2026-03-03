@@ -8,6 +8,12 @@ const subscriptionSchema = new mongoose.Schema({
         minlength: [2, 'Subscription name must be at least 3 characters long'],
         maxlength: [100, 'Subscription name must be less than 50 characters long']
     },
+    icon: {
+        type: String,
+        required: [true, 'Icon is required'],
+        trim: true,
+        maxlength: [100, 'Icon must be less than 100 characters long']
+    },
     price: {
         type: Number,
         required: [true, 'Subscription price is required'],
